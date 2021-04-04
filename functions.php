@@ -21,7 +21,7 @@ add_action( 'init', 'add_slug_body_class' );
 add_filter( 'body_class', 'add_slug_body_class' );
 
 
-add_action( 'init', 'add_category_to_single' );
+add_action( 'init', 'add_category_body class' );
 function add_category_to_single($classes) {
 if (is_single() ) {
     global $post;
@@ -33,7 +33,7 @@ if (is_single() ) {
 // return the $classes array
 return $classes;
 }
-add_filter('body_class','add_category_to_single');
+add_filter('body_class','add_category_body');
 
 
 // Custom Widget Sidebar
