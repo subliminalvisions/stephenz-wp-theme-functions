@@ -11,14 +11,29 @@ add_action( 'wp_enqueue_scripts', 'wp_stephenz_child_enqueue_style', 11);
 
 add_action( 'init', 'add_slug_body_class' );
 // Page Slug -> Body Class
-function add_slug_body_class( $classes ) {
-global $post;
-if ( isset( $post ) ) {
-$classes[] = $post->post_type . '-' . $post->post_name;
+    function add_slug_body_class( $classes ) {
+        global $post;
+        if ( isset( $post ) ) {
+            $classes[] = $post->post_type . '-' . $post->post_name;
+        }
+        return $classes;
+    }
+add_filter( 'body_class', 'add_slug_body_class' );
+
+
+add_action( 'init', 'add_category_to_single' );
+function add_category_to_single($classes) {
+if (is_single() ) {
+    global $post;
+    foreach((get_the_category($post->ID)) as $category) {
+    // add category slug to the $classes array
+        $classes[] = $category->category_nicename;
+    }
 }
+// return the $classes array
 return $classes;
 }
-add_filter( 'body_class', 'add_slug_body_class' );
+add_filter('body_class','add_category_to_single');
 
 
 // Custom Widget Sidebar
