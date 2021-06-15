@@ -248,3 +248,75 @@ function replace_howdy_message( $wp_admin_bar ) {
     ) );
 }
 add_filter( 'admin_bar_menu', 'replace_howdy_message',25 );
+
+
+// add [raw/] shortcode to disable wp auto formatting
+function my_formatter($content) {
+    $new_content = ’;
+    $pattern_full = '{([raw].*?[/raw])}is';
+    $pattern_contents = '{[raw](.*?)[/raw]}is';
+    $pieces = preg_split($pattern_full, $content, -1, PREG_SPLIT_DELIM_CAPTURE);
+  
+    foreach ($pieces as $piece) {
+      if (preg_match($pattern_contents, $piece, $matches)) {
+        $new_content .= $matches[1];
+      } else {
+        $new_content .= wptexturize(wpautop($piece));
+      }
+    }
+  
+    return $new_content;
+}
+  
+remove_filter('the_content', 'wpautop');
+remove_filter('the_content', 'wptexturize');
+
+add_filter('the_content', 'my_formatter', 99);
+  
+
+// add a fun footnote after posts
+function insertFootNote($content) {
+    if(!is_feed() && !is_home()) {
+            $content.= "<div class='subscribe'>";
+            $content.= "<h4>Enjoyed this article?</h4>";
+            // or whatever url you prefer 
+            $content.= "<p>Subscribe to our  <a href='http://feeds2.feedburner.com/WpRecipes'>RSS feed</a> and never miss a recipe!</p>";
+            $content.= "</div>";
+    }
+    return $content;
+}
+add_filter ('the_content', 'insertFootNote');
+
+
+// FOR DEBUGGING ONLY
+function list_all_hooked_functions($tag=false){
+    global $wp_filter;
+    if ($tag) {
+     $hook[$tag]=$wp_filter[$tag];
+     if (!is_array($hook[$tag])) {
+     trigger_error("Nothing found for '$tag' hook", E_USER_WARNING);
+     return;
+     }
+    }
+    else {
+     $hook=$wp_filter;
+     ksort($hook);
+    }
+    echo '<pre>';
+    foreach($hook as $tag => $priority){
+     echo "<br />&gt;&gt;&gt;&gt;&gt;t<strong>$tag</strong><br />";
+     ksort($priority);
+     foreach($priority as $priority => $function){
+     echo $priority;
+     foreach($function as $name => $properties) echo "t$name<br />";
+     }
+    }
+    echo '</pre>';
+    return;
+}
+   
+
+
+
+
+
