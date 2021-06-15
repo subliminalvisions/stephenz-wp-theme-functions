@@ -67,6 +67,15 @@ function stephenz_widgets_init() {
 }
 add_action( 'widgets_init', 'stephenz_widgets_init', 11 );
 
+
+// remove url from comments to de-motivate comment spammers
+function remove_comment_fields($fields) {
+    unset($fields['url']);
+    return $fields;
+}
+add_filter('comment_form_default_fields','remove_comment_fields');
+
+
 /**
  * Sort by custom fields.
  * mt1 refers to meta_1, mt2 to meta_2 and mt3 to meta_3
@@ -229,5 +238,13 @@ function save_custom_meta_box($post_id, $post, $update)
 
 add_action("save_post", "save_custom_meta_box", 10, 3);
 
-
-	
+// not everyone is a cheesy western fan
+function replace_howdy_message( $wp_admin_bar ) {
+    $my_account = $wp_admin_bar->get_node('my-account');
+    $newtitle = str_replace( 'Howdy,', 'Logged in as', $my_account->title );
+    $wp_admin_bar->add_node( array(
+    'id' => 'my-account',
+    'title' => $newtitle,
+    ) );
+}
+add_filter( 'admin_bar_menu', 'replace_howdy_message',25 );
