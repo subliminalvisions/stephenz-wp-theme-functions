@@ -7,7 +7,7 @@ function wp_stephenz_child_enqueue_style() {
         wp_enqueue_style( 'Custom-Styles');
 	}
 add_action( 'wp_enqueue_scripts', 'wp_stephenz_child_enqueue_style', 11);
-
+// function priority, higher number means higher priority // 
 
 add_action( 'init', 'add_slug_body_class' );
 // Page Slug -> Body Class
@@ -19,6 +19,15 @@ add_action( 'init', 'add_slug_body_class' );
         return $classes;
     }
 add_filter( 'body_class', 'add_slug_body_class' );
+
+
+/* scripts for just the home page wp_head */
+add_action('wp_head', 'add_script_snippets_to_home_page');
+function add_script_snippets_to_home_page() {
+if(is_front_page()) {  ?>
+<!-- PASTE HOME PAGE HEADER CODE HERE -->
+<?php  }
+};
 
 
 add_action( 'init', 'add_category_body class' );
