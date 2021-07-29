@@ -77,6 +77,19 @@ function stephenz_widgets_init() {
 add_action( 'widgets_init', 'stephenz_widgets_init', 11 );
 
 
+// shortcode for hidden readmore text 
+function readmore_expand_function( $atts = array(), $content = null ) {
+	// set up default parameters
+	extract(shortcode_atts(array(
+	 'moretext' => '#'
+	), $atts));
+
+	return '<a class="readmore_expand_button">'. $moretext. '</a><div class="readmore_expand_content">'  . $content . '</div>';
+}
+add_shortcode( 'readmore_expand', 'readmore_expand_function' );
+
+
+
 // remove url from comments to de-motivate comment spammers
 function remove_comment_fields($fields) {
     unset($fields['url']);
