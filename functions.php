@@ -368,3 +368,69 @@ function add_async_attribute($tag, $handle) {
 
 
 
+
+ // REGISTERING CUSTOM TAXONOMY FOR CUSTOM POST TYPE 'surgical' on functions.php file:
+// update surgical 
+
+add_action( 'init', 'business_listing_taxonomy');
+function business_listing_taxonomy() {
+    register_taxonomy(
+        'surgical_cat',  //The name of the taxonomy. Name should be in slug form (must not contain capital letters or spaces).
+        'surgical',  //post type name
+        array(
+        'public'                => true,
+        'hierarchical'          => true,
+        'label'                 => 'Surgical Category',  //Display name
+        'query_var'             => true,
+        'show_admin_column' => true,
+        'rewrite'               => array(
+            'slug'              => 'surgical', // This controls the base slug that will display before each term
+            'with_front'        => false // Don't display the category base before
+            )
+        )
+    );
+}
+
+
+
+
+// Adding Custom Post Type for Hotels Listing
+
+function my_custom_post_hotel() {
+
+    //labels array added inside the function and precedes args array
+    
+    $labels = array(
+    'name' => _x( 'Hotels', 'post type general name' ),
+    'singular_name' => _x( 'Hotel', 'post type singular name' ),
+    'add_new' => _x( 'Add New', 'Hotel' ),
+    'add_new_item' => __( 'Add New Hotel' ),
+    'edit_item' => __( 'Edit Hotel' ),
+    'new_item' => __( 'New Hotel' ),
+    'all_items' => __( 'All Hotels' ),
+    'view_item' => __( 'View Hotel' ),
+    'search_items' => __( 'Search hotels' ),
+    'not_found' => __( 'No hotels found' ),
+    'not_found_in_trash' => __( 'No hotels found in the Trash' ),
+    'parent_item_colon' => '',
+    'menu_name' => 'Hotels'
+    );
+    
+    // args array
+    
+    $args = array(
+    'labels' => $labels,
+    'description' => 'Displays city hotels and their ratings',
+    'public' => true,
+    'menu_position' => 4,
+    'supports' => array( 'title', 'editor', 'thumbnail', 'excerpt', 'comments' ),
+    'has_archive' => true,
+    );
+    
+    register_post_type( 'hotel', $args );
+}
+add_action( 'init', 'my_custom_post_hotel' );
+
+    
+
+
